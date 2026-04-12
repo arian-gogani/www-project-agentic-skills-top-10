@@ -188,6 +188,21 @@ The following open-source tools can be used to automate checklist verification:
 
 ---
 
+## Pipeline Trust Boundary Review (B1-B4)
+
+See [trust-boundary-model.md](./trust-boundary-model.md) for full framework.
+
+- [ ] **B1**: Are agent permissions explicitly declared and minimal before session start?
+- [ ] **B1**: Is developer context (MEMORY.md, issue content) sanitized before agent ingestion?
+- [ ] **B2**: Are all AI-generated dependency names validated against live registries?
+- [ ] **B2**: Is AI-generated code passing SAST before repository commit?
+- [ ] **B3**: Are AI-generated IaC and CI scripts scanned before build pipeline ingestion?
+- [ ] **B3**: Are all dependencies pinned to immutable hashes, not version ranges?
+- [ ] **B4**: Are AI-generated deployments running in sandboxed environments (not host-mode)?
+- [ ] **B4**: Is there audit logging for all agent-initiated production actions?
+
+---
+
 ## How to Contribute
 
 This checklist is a living document. To suggest additional checks, platform-specific guidance, or corrections:
