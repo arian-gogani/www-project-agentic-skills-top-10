@@ -42,6 +42,8 @@ Embed execution instructions in repository config files (hooks, MCP settings, en
 
 Compromise a trusted skill author's account, push a backdoored version.
 
+
+
 ## Preventive Mitigations
 
 1. **Implement skill provenance tracking**: link each published skill to a verified code-signing identity.
@@ -80,8 +82,18 @@ def verify_transparency_log(skill_name: str, expected_hash: str) -> bool:
     # Check if our expected hash is in the log
     log_entries = response.json()
     return any(entry['hash'] == expected_hash for entry in log_entries)
-```
 
+### Code Example: SKILL.md Integrity Check
+```
+import hashlib
+
+def verify_skill_file(file_path: str, expected_hash: str) -> bool:
+    """Verify integrity of SKILL.md"""
+    with open(file_path, "rb") as f:
+        content = f.read()
+
+    actual_hash = hashlib.sha256(content).hexdigest()
+    return actual_hash == expected_hash
 ## OWASP Mapping
 
 - **LLM03** (Supply Chain)
