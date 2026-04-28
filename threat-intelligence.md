@@ -446,5 +446,4 @@ If you discover a malicious skill or security threat:
 
 ---
 
-*Threat intelligence is updated daily. Last update: March 22, 2026*</content>
-<parameter name="filePath">c:\Users\kenhu\www-project-agentic-skills-top-10\threat-intelligence.md
+*Threat intelligence is updated daily. Last update: March 22, 2026*

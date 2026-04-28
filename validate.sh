@@ -34,7 +34,7 @@ echo "📊 Content Statistics:"
 echo "   AST files: $ast_count"
 
 # Check for required files
-required_files=("_config.yml" "index.md" "README.md" "MAINTENANCE.md")
+required_files=("_config.yml" "index.md" "README.md" "MAINTENANCE.md" "universal-skill-format.md")
 echo ""
 echo "📁 Required files check:"
 for file in "${required_files[@]}"; do
@@ -71,7 +71,7 @@ for file in *.md ast*.md; do
         for link in $links; do
             # Remove anchor links
             clean_link=$(echo "$link" | cut -d'#' -f1)
-            if [ ! -f "$clean_link" ] && [ "$clean_link" != "universal-skill-format.md" ]; then
+            if [ ! -f "$clean_link" ]; then
                 echo "   ❌ Broken link in $file: $clean_link"
                 broken_links=$((broken_links + 1))
             fi
@@ -94,6 +94,17 @@ else
     echo "   ✅ No TODO items found"
 fi
 
+# Check for accidental content artifacts that should not be committed
+echo ""
+echo "🧹 Artifact hygiene check:"
+artifact_count=$(grep -r "</content>\|[A-Za-z]:\\\\\\Users\\\\" --include="*.md" . | wc -l)
+if [ $artifact_count -gt 0 ]; then
+    echo "   ❌ Found $artifact_count artifact marker(s) (e.g., </content> or local absolute paths)"
+    grep -r "</content>\|[A-Za-z]:\\\\\\Users\\\\" --include="*.md" . | head -5
+else
+    echo "   ✅ No content artifacts found"
+fi
+
 # Final summary
 echo ""
 echo "🎯 Validation Summary:"
@@ -103,10 +114,11 @@ echo "   - Required files: $(ls -1 "${required_files[@]}" 2>/dev/null | wc -l)/$
 echo "   - Frontmatter: All AST files have frontmatter"
 echo "   - Internal links: Checked for broken links"
 echo "   - Content completeness: $( [ $todo_count -eq 0 ] && echo "✅" || echo "⚠️" )"
+echo "   - Artifact hygiene: $( [ $artifact_count -eq 0 ] && echo "✅" || echo "❌" )"
 
 echo ""
 echo "✨ Validation complete!"
-if [ $broken_links -gt 0 ] || [ $todo_count -gt 0 ]; then
+if [ $broken_links -gt 0 ] || [ $todo_count -gt 0 ] || [ $artifact_count -gt 0 ]; then
     echo "⚠️  Some issues found - please review above"
     exit 1
 else
