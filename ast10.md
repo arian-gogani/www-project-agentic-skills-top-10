@@ -45,6 +45,10 @@ Same malicious payload deployed across four platforms simultaneously; security t
 4. **Build platform-agnostic skill scanners** that evaluate the content layer independently of the runtime.
 5. **Normalize `risk_tier`, `permissions`, and `signature` fields** across all platform-specific formats.
 
+### Tooling: metadata loss simulator
+
+Use the browser-only **[Cross-platform metadata loss simulator](assets/metadata-loss-simulator.html)** to paste a source manifest and a ported target manifest (YAML or JSON). It normalizes fields, highlights **lost** or **weakened** security properties (for example allowlisted egress replaced by `network: true`), and exports a **machine-readable JSON** report suitable for PRs or ticket evidence.
+
 ## Universal Skill Format Proposal
 
 The following YAML format is proposed as a cross-platform standard that mitigates AST10 and provides the metadata foundation required to address AST01 through AST09. It is designed to be a superset of all current platform-specific formats.

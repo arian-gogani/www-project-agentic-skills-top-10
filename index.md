@@ -276,6 +276,8 @@ Use our **interactive web form** to submit new AST risk entries:
 
 **➕ [Submit New Risk Entry](assets/new-ast-form.html)**
 
+**🔀 [AST10 metadata loss simulator](assets/metadata-loss-simulator.html)** — Compare two skill manifests to see which security metadata is lost or weakened after a cross-platform port.
+
 The form generates properly formatted markdown and provides multiple submission options:
 - Direct GitHub file creation
 - Create GitHub Issue
