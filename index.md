@@ -427,6 +427,15 @@ changelog:
 - OpenClaw threat modeling and skill security scanning research
 - RSA / OWASP conference speaker on AI security
 
+### Co-Leads
+
+- **Akram Sheriff**
+- **Aonan Guan**
+- **Bhavya Gupta**
+- **Fabio Cerullo**
+- **Hammad Atta**
+- **Iftach Orr**
+
 ### Contribution Model
 
 | Channel | Purpose |
