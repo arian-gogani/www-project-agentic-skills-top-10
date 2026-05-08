@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OWASP AST10 — Cross-Platform Metadata Loss Simulator</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    :root {
+      --primary: #003366;
+      --primary-light: #004488;
+      --accent: #0066cc;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --gray-600: #6c757d;
+      --gray-800: #343a40;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.55;
+      color: var(--gray-800);
+      background: var(--gray-100);
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 28px 0;
+      margin-bottom: 24px;
+    }
+    header h1 { font-size: 1.65rem; margin-bottom: 8px; }
+    header p { opacity: 0.92; max-width: 900px; }
+    header nav { margin-top: 14px; }
+    header nav a { color: #b8d4ff; text-decoration: none; }
+    header nav a:hover { text-decoration: underline; }
+    .form-section {
+      background: white;
+      border-radius: 8px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+    .form-section h2 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 960px) { .grid-2 { grid-template-columns: 1fr; } }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--gray-800); }
+    select, textarea {
+      width: 100%;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      padding: 10px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+    }
+    textarea { min-height: 220px; resize: vertical; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+    .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary { background: var(--gray-200); color: var(--gray-800); }
+    .btn-secondary:hover { background: var(--gray-300); }
+    .help { font-size: 0.85rem; color: var(--gray-600); margin-top: 6px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-lost { background: #fde8e8; color: #c0392b; }
+    .badge-weak { background: #fff8e6; color: #856404; }
+    .badge-ok { background: #e6f4ea; color: #1e7e34; }
+    .badge-info { background: #e7f1ff; color: var(--primary); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+    th, td { border: 1px solid var(--gray-300); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--gray-200); color: var(--primary); }
+    td.mono { font-family: ui-monospace, Menlo, monospace; font-size: 11px; word-break: break-all; }
+    #json-out { min-height: 160px; }
+    .summary { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+    .pill {
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: var(--gray-200);
+      font-size: 0.9rem;
+    }
+    .pill strong { color: var(--primary); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Cross-platform metadata loss simulator (AST10)</h1>
+      <p>
+        Paste a <strong>source</strong> manifest (rich metadata) and a <strong>target</strong> manifest (after port or rewrite).
+        The tool flattens both into a normalized view aligned with the Universal Skill Format shape, then reports
+        <strong>lost</strong>, <strong>weakened</strong>, and <strong>preserved</strong> security properties.
+      </p>
+      <nav>
+        <a href="new-ast-form.html">New risk entry form</a>
+        ·
+        <a href="../ast10.html">AST10 documentation</a>
+        ·
+        <a href="../checklist.html">Checklist</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="form-section">
+      <h2>Inputs</h2>
+      <div class="row">
+        <button type="button" class="btn btn-secondary" id="btn-example">Load example (full YAML → stripped JSON)</button>
+        <button type="button" class="btn btn-secondary" id="btn-clear">Clear both</button>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label for="src-flavor">Source format</label>
+          <select id="src-flavor">
+            <option value="auto">Auto (JSON or YAML)</option>
+            <option value="yaml">YAML</option>
+            <option value="json">JSON</option>
+          </select>
+          <label for="source-text" style="margin-top:12px">Source manifest</label>
+          <textarea id="source-text" placeholder="Paste YAML or JSON…"></textarea>
+          <p class="help">Tip: include <code>permissions</code>, <code>risk_tier</code>, <code>signature</code>, <code>content_hash</code>, and <code>scan_status</code> when testing loss.</p>
+        </div>
+        <div>
+          <label for="tgt-flavor">Target format</label>
+          <select id="tgt-flavor">
+            <option value="auto">Auto (JSON or YAML)</option>
+            <option value="yaml">YAML</option>
+            <option value="json">JSON</option>
+          </select>
+          <label for="target-text" style="margin-top:12px">Target manifest (ported)</label>
+          <textarea id="target-text" placeholder="Paste the skill config as it exists on the target platform…"></textarea>
+          <p class="help">Often smaller: many fields are dropped or replaced with booleans (for example <code>network: true</code>).</p>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button type="button" class="btn btn-primary" id="btn-run">Compare manifests</button>
+      </div>
+      <p id="parse-error" class="help" style="color:var(--danger);display:none"></p>
+    </div>
+
+    <div class="form-section" id="results-section" style="display:none">
+      <h2>Results</h2>
+      <div class="summary" id="summary"></div>
+      <h3 style="margin:14px 0 8px;color:var(--primary);font-size:1rem">Findings</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Status</th>
+              <th>Source value</th>
+              <th>Target value</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="findings-body"></tbody>
+        </table>
+      </div>
+      <h3 style="margin:18px 0 8px;color:var(--primary);font-size:1rem">Machine-readable report</h3>
+      <textarea id="json-out" readonly></textarea>
+      <div class="row" style="margin-top:10px">
+        <button type="button" class="btn btn-secondary" id="btn-copy">Copy JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  const EXAMPLE_SOURCE = `name: example-skill
+version: 1.0.0
+description: "Demonstration skill"
+permissions:
+  files:
+    read:
+      - ~/.config/app.json
+    write:
+      - ~/.config/app.json
+    deny_write:
+      - SOUL.md
+      - MEMORY.md
+      - AGENTS.md
+  network:
+    allow:
+      - api.example.com
+    deny: "*"
+  shell: false
+  tools:
+    - web_fetch
+    - read_file
+risk_tier: L2
+scan_status:
+  scanner: "example-scan@1.0.0"
+  last_scanned: "2026-04-01"
+  result: "pass"
+signature: "ed25519:placeholder"
+content_hash: "sha256:placeholder"
+`;
+
+  const EXAMPLE_TARGET = `{
+  "name": "example-skill",
+  "version": "1.0.0",
+  "permissions": {
+    "network": true,
+    "shell": true
+  }
+}`;
+
+  function stripOptionalFrontmatter(text) {
+    const t = text.trim();
+    if (!t.startsWith('---')) return text;
+    const lines = t.split(/\r?\n/);
+    if (lines.length < 2) return text;
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i] === '---') {
+        return lines.slice(i + 1).join('\n').trim();
+      }
+    }
+    return text;
+  }
+
+  function unwrapCommonRoots(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    if (obj.skill && typeof obj.skill === 'object') return obj.skill;
+    if (obj.manifest && typeof obj.manifest === 'object') return obj.manifest;
+    return obj;
+  }
+
+  function parseInput(text, flavor) {
+    const raw = stripOptionalFrontmatter(text).trim();
+    if (!raw) throw new Error('Empty input');
+    const f = flavor === 'auto' ? null : flavor;
+    let lastErr = null;
+    if (!f || f === 'json') {
+      try {
+        return unwrapCommonRoots(JSON.parse(raw));
+      } catch (e) { lastErr = e; if (f === 'json') throw e; }
+    }
+    if (!f || f === 'yaml') {
+      try {
+        return unwrapCommonRoots(jsyaml.load(raw));
+      } catch (e) { lastErr = e; if (f === 'yaml') throw e; }
+    }
+    throw lastErr || new Error('Could not parse as JSON or YAML');
+  }
+
+  function flattenManifest(obj, prefix) {
+    const out = {};
+    if (obj === null || obj === undefined) return out;
+    if (typeof obj !== 'object') {
+      out[prefix || 'value'] = obj;
+      return out;
+    }
+    if (Array.isArray(obj)) {
+      if (prefix) out[prefix] = obj;
+      return out;
+    }
+    for (const k of Object.keys(obj)) {
+      const p = prefix ? prefix + '.' + k : k;
+      const v = obj[k];
+      if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
+        Object.assign(out, flattenManifest(v, p));
+      } else {
+        out[p] = v;
+      }
+    }
+    return out;
+  }
+
+  function isEmpty(v) {
+    if (v === undefined || v === null) return true;
+    if (typeof v === 'string' && v.trim() === '') return true;
+    if (Array.isArray(v) && v.length === 0) return true;
+    return false;
+  }
+
+  function stringifyVal(v) {
+    if (v === undefined) return '(missing)';
+    if (typeof v === 'object') return JSON.stringify(v);
+    return String(v);
+  }
+
+  function compareNetworkAllow(srcVal, tgtVal) {
+    if (isEmpty(srcVal)) return null;
+    if (tgtVal === undefined || tgtVal === null) {
+      return { status: 'lost', notes: 'Network allowlist absent on target; egress intent unknown.' };
+    }
+    if (tgtVal === true || tgtVal === '*' || tgtVal === 'all') {
+      return { status: 'weakened', notes: 'Source used explicit allowlist; target uses broad network permission (higher exposure).' };
+    }
+    if (Array.isArray(srcVal) && Array.isArray(tgtVal)) {
+      const missing = srcVal.filter(function (x) { return tgtVal.indexOf(x) === -1; });
+      if (missing.length) {
+        return { status: 'weakened', notes: 'Allowlist shrank: ' + missing.join(', ') + ' not represented on target (may change egress policy).' };
+      }
+      return { status: 'ok', notes: 'Allowlist entries preserved.' };
+    }
+    return { status: 'ok', notes: 'Compare manually for semantic equivalence.' };
+  }
+
+  function compareDenyWrite(srcVal, tgtVal) {
+    if (isEmpty(srcVal)) return null;
+    if (!Array.isArray(srcVal)) return null;
+    if (!Array.isArray(tgtVal) || tgtVal.length === 0) {
+      return { status: 'lost', notes: 'deny_write list missing or empty on target; identity-file protections may be gone.' };
+    }
+    const missing = srcVal.filter(function (x) { return tgtVal.indexOf(x) === -1; });
+    if (missing.length) {
+      return { status: 'weakened', notes: 'Some deny_write paths not carried over: ' + missing.join(', ') };
+    }
+    return { status: 'ok', notes: 'deny_write coverage preserved.' };
+  }
+
+  function compareShell(srcVal, tgtVal) {
+    if (srcVal === undefined || srcVal === null) return null;
+    if (tgtVal === undefined || tgtVal === null) {
+      return { status: 'lost', notes: 'shell not declared on target.' };
+    }
+    if (srcVal === false && tgtVal === true) {
+      return { status: 'weakened', notes: 'Shell access escalates from false to true.' };
+    }
+    if (srcVal === true && tgtVal === false) {
+      return { status: 'ok', notes: 'Shell restricted on target (good).' };
+    }
+    return { status: 'ok', notes: 'Shell declaration compatible.' };
+  }
+
+  function compareScalarPresence(key, srcVal, tgtVal) {
+    if (isEmpty(srcVal)) return null;
+    if (tgtVal === undefined || isEmpty(tgtVal)) {
+      return { status: 'lost', notes: 'Field absent or empty after port.' };
+    }
+    return { status: 'ok', notes: 'Present on both sides.' };
+  }
+
+  const SECURITY_KEYS = [
+    'risk_tier',
+    'content_hash',
+    'signature',
+    'permissions.shell',
+    'permissions.network.allow',
+    'permissions.network.deny',
+    'permissions.files.read',
+    'permissions.files.write',
+    'permissions.files.deny_write',
+    'permissions.tools',
+    'scan_status.scanner',
+    'scan_status.last_scanned',
+    'scan_status.result',
+    'author.signing_key',
+    'author.identity',
+    'author.name'
+  ];
+
+  function analyze(srcFlat, tgtFlat) {
+    const findings = [];
+    const handled = {};
+
+    function addFinding(key, status, notes, srcVal, tgtVal) {
+      findings.push({ key: key, status: status, notes: notes, source: srcVal, target: tgtVal });
+      handled[key] = true;
+    }
+
+    const nw = compareNetworkAllow(srcFlat['permissions.network.allow'], tgtFlat['permissions.network.allow']);
+    if (nw) {
+      addFinding('permissions.network.allow', nw.status, nw.notes, srcFlat['permissions.network.allow'], tgtFlat['permissions.network.allow']);
+    }
+
+    const dw = compareDenyWrite(srcFlat['permissions.files.deny_write'], tgtFlat['permissions.files.deny_write']);
+    if (dw) {
+      addFinding('permissions.files.deny_write', dw.status, dw.notes, srcFlat['permissions.files.deny_write'], tgtFlat['permissions.files.deny_write']);
+    }
+
+    const sh = compareShell(srcFlat['permissions.shell'], tgtFlat['permissions.shell']);
+    if (sh) {
+      addFinding('permissions.shell', sh.status, sh.notes, srcFlat['permissions.shell'], tgtFlat['permissions.shell']);
+    }
+
+    const sDeny = srcFlat['permissions.network.deny'];
+    if (!isEmpty(sDeny)) {
+      const tDeny = tgtFlat['permissions.network.deny'];
+      if (tDeny === undefined || isEmpty(tDeny)) {
+        const notes = (sDeny === '*' || sDeny === '"*"')
+          ? 'Default-deny egress marker lost.'
+          : 'Field absent or empty after port.';
+        addFinding('permissions.network.deny', 'lost', notes, sDeny, tDeny);
+      } else {
+        addFinding('permissions.network.deny', 'ok', 'Present on both sides.', sDeny, tDeny);
+      }
+    }
+
+    SECURITY_KEYS.forEach(function (key) {
+      if (handled[key]) return;
+      const s = srcFlat[key];
+      const t = tgtFlat[key];
+      if (isEmpty(s)) return;
+      if (key === 'permissions.files.read' || key === 'permissions.files.write' || key === 'permissions.tools') {
+        if (isEmpty(t)) {
+          addFinding(key, 'lost', 'Collection absent or empty on target.', s, t);
+        } else if (Array.isArray(s) && Array.isArray(t)) {
+          const missing = s.filter(function (x) { return t.indexOf(x) === -1; });
+          if (missing.length) {
+            addFinding(key, 'weakened', 'Some entries not represented on target.', s, t);
+          } else {
+            addFinding(key, 'ok', 'Same or superset on target.', s, t);
+          }
+        } else {
+          addFinding(key, 'ok', 'Present on target (non-array compare).', s, t);
+        }
+        return;
+      }
+      const r = compareScalarPresence(key, s, t);
+      if (r) addFinding(key, r.status, r.notes, s, t);
+    });
+
+    const extraKeys = Object.keys(srcFlat).filter(function (k) {
+      if (handled[k]) return false;
+      if (k === 'name' || k === 'version' || k === 'description' || k === 'platforms') return false;
+      return !isEmpty(srcFlat[k]) && SECURITY_KEYS.indexOf(k) === -1;
+    });
+    extraKeys.forEach(function (key) {
+      const s = srcFlat[key];
+      const t = tgtFlat[key];
+      if (t === undefined || isEmpty(t)) {
+        addFinding(key, 'lost', 'Present on source, missing or empty on target.', s, t);
+      } else {
+        addFinding(key, 'ok', 'Also present on target (not in core AST10 checklist).', s, t);
+      }
+    });
+
+    return findings;
+  }
+
+  function render(findings) {
+    const body = document.getElementById('findings-body');
+    body.innerHTML = '';
+    let lost = 0, weak = 0, ok = 0;
+    findings.forEach(function (f) {
+      if (f.status === 'lost') lost++;
+      else if (f.status === 'weakened') weak++;
+      else ok++;
+      const tr = document.createElement('tr');
+      const badgeClass = f.status === 'lost' ? 'badge-lost' : f.status === 'weakened' ? 'badge-weak' : 'badge-ok';
+      tr.innerHTML =
+        '<td class="mono">' + escapeHtml(f.key) + '</td>' +
+        '<td><span class="badge ' + badgeClass + '">' + escapeHtml(f.status) + '</span></td>' +
+        '<td class="mono">' + escapeHtml(stringifyVal(f.source)) + '</td>' +
+        '<td class="mono">' + escapeHtml(stringifyVal(f.target)) + '</td>' +
+        '<td>' + escapeHtml(f.notes) + '</td>';
+      body.appendChild(tr);
+    });
+    document.getElementById('summary').innerHTML =
+      '<span class="pill"><strong>' + findings.length + '</strong> rows</span>' +
+      '<span class="pill"><strong>' + lost + '</strong> lost</span>' +
+      '<span class="pill"><strong>' + weak + '</strong> weakened</span>' +
+      '<span class="pill"><strong>' + ok + '</strong> ok / informational</span>';
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function run() {
+    const errEl = document.getElementById('parse-error');
+    errEl.style.display = 'none';
+    try {
+      const src = parseInput(document.getElementById('source-text').value, document.getElementById('src-flavor').value);
+      const tgt = parseInput(document.getElementById('target-text').value, document.getElementById('tgt-flavor').value);
+      const srcFlat = flattenManifest(src, '');
+      const tgtFlat = flattenManifest(tgt, '');
+      const findings = analyze(srcFlat, tgtFlat);
+      render(findings);
+      const report = {
+        tool: 'owasp-ast10-metadata-loss-simulator',
+        version: '1.0.0',
+        generatedAt: new Date().toISOString(),
+        summary: {
+          rows: findings.length,
+          lost: findings.filter(function (f) { return f.status === 'lost'; }).length,
+          weakened: findings.filter(function (f) { return f.status === 'weakened'; }).length,
+          ok: findings.filter(function (f) { return f.status === 'ok'; }).length
+        },
+        normalizedSource: srcFlat,
+        normalizedTarget: tgtFlat,
+        findings: findings
+      };
+      document.getElementById('json-out').value = JSON.stringify(report, null, 2);
+      document.getElementById('results-section').style.display = 'block';
+    } catch (e) {
+      errEl.textContent = 'Parse error: ' + (e && e.message ? e.message : String(e));
+      errEl.style.display = 'block';
+      document.getElementById('results-section').style.display = 'none';
+    }
+  }
+
+  document.getElementById('btn-run').addEventListener('click', run);
+  document.getElementById('btn-example').addEventListener('click', function () {
+    document.getElementById('source-text').value = EXAMPLE_SOURCE;
+    document.getElementById('target-text').value = EXAMPLE_TARGET;
+    document.getElementById('src-flavor').value = 'yaml';
+    document.getElementById('tgt-flavor').value = 'json';
+  });
+  document.getElementById('btn-clear').addEventListener('click', function () {
+    document.getElementById('source-text').value = '';
+    document.getElementById('target-text').value = '';
+  });
+  document.getElementById('btn-copy').addEventListener('click', function () {
+    const text = document.getElementById('json-out').value;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function () {
+        const ta = document.getElementById('json-out');
+        ta.select();
+        document.execCommand('copy');
+      });
+    } else {
+      const ta = document.getElementById('json-out');
+      ta.select();
+      document.execCommand('copy');
+    }
+  });
+})();
+  </script>
+</body>
+</html>
