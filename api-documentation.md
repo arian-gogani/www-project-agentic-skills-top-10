@@ -401,5 +401,4 @@ func main() {
 
 ---
 
-*API documentation is versioned. Current version: v1.1.0. Last updated: March 2026*</content>
-<parameter name="filePath">c:\Users\kenhu\www-project-agentic-skills-top-10\api-documentation.md
+*API documentation is versioned. Current version: v1.1.0. Last updated: March 2026*

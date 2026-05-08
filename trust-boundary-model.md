@@ -1,6 +1,10 @@
 # B1-B4 Trust Boundary Model for AI Code Generation Agents
 
-**Author**: Alok Tibrewala, OWASP BASC 2026  
+**Author**: Alok Tibrewala  
+**Affiliation**: Senior Member, IEEE | Independent Researcher  
+**Presented at**: OWASP BASC 2026  
+**Slides**: https://speakerdeck.com/aloktibrewala/threat-modeling-development-workflows-with-autonomous-code-generation  
+**Contact**: alokt2151 AT gmail DOT com  
 **Status**: Community Contribution  
 **Related Risks**: AST01, AST02, AST03, AST04, AST06, AST07, AST08, AST09
 

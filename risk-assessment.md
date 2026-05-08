@@ -475,5 +475,4 @@ button:hover:not(:disabled) {
 
 ---
 
-*This interactive tool helps assess AI agent skills against the OWASP AST10 framework. Results are for educational purposes and should be supplemented with professional security review.*</content>
-<parameter name="filePath">c:\Users\kenhu\www-project-agentic-skills-top-10\risk-assessment.md
+*This interactive tool helps assess AI agent skills against the OWASP AST10 framework. Results are for educational purposes and should be supplemented with professional security review.*

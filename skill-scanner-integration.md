@@ -385,5 +385,4 @@ To contribute new scanning rules or improve existing scanners:
 
 ---
 
-*Regular updates to scanning tools and integration guides. Last updated: March 2026*</content>
-<parameter name="filePath">c:\Users\kenhu\www-project-agentic-skills-top-10\skill-scanner-integration.md
+*Regular updates to scanning tools and integration guides. Last updated: March 2026*

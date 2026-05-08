@@ -47,7 +47,7 @@ Same malicious payload deployed across four platforms simultaneously; security t
 
 ### Tooling: metadata loss simulator
 
-Use the browser-only **[Cross-platform metadata loss simulator](https://owasp.org/www-project-agentic-skills-top-10/assets/metadata-loss-simulator.html)** to paste a source manifest and a ported target manifest (YAML or JSON). It normalizes fields, highlights **lost** or **weakened** security properties (for example allowlisted egress replaced by `network: true`), and exports a **machine-readable JSON** report suitable for PRs or ticket evidence.
+Use the browser-only **[Cross-platform metadata loss simulator](assets/metadata-loss-simulator.html)** to paste a source manifest and a ported target manifest (YAML or JSON). It normalizes fields, highlights **lost** or **weakened** security properties (for example allowlisted egress replaced by `network: true`), and exports a **machine-readable JSON** report suitable for PRs or ticket evidence.
 
 ## Universal Skill Format Proposal
 

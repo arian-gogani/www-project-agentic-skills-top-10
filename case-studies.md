@@ -173,5 +173,4 @@ Based on these case studies, we've developed the following prevention framework:
 
 ---
 
-*This page is regularly updated with new case studies and analysis. Last updated: March 2026*</content>
-<parameter name="filePath">c:\Users\kenhu\www-project-agentic-skills-top-10\case-studies.md
+*This page is regularly updated with new case studies and analysis. Last updated: March 2026*
