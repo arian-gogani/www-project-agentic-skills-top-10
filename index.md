@@ -489,6 +489,7 @@ changelog:
 ### Academic and Technical
 
 - **"Prompt Injection Attacks on Agentic Coding Assistants"** (arXiv:2601.17548)
+- **"Do Not Mention This to the User": Detecting and Understanding Malicious Agent Skills in the Wild** (arXiv:2602.06547, USENIX Security 2026)
 - **snyk-labs/toxicskills-goof** — Real malicious skill samples for scanner testing.
 - **openclaw/openclaw Issue #10827** — Skill supply-chain security: provenance tracking and permission manifests proposal.
 

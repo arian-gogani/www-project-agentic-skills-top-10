@@ -23,6 +23,7 @@ Unlike traditional malicious packages, malicious skills exploit both the *code l
 - Five of the top seven most-downloaded ClawHub skills at peak infection were confirmed malware.
 - Three lines of markdown in a `SKILL.md` file were sufficient to exfiltrate SSH keys (Snyk, Feb 2026).
 - Skills impersonating "Google," "Solana wallet tracker," "YouTube Summarize Pro," and "Polymarket Trader" — all designed to match high-demand searches.
+- A USENIX Security 2026 measurement study analyzed 98,380 skills across public marketplaces and confirmed 157 malicious skills carrying 632 vulnerabilities (avg. 4.03 per skill); 73.2% of malicious skills implemented shadow features hidden from the user, and 54.1% traced to a single publisher cluster (Liu et al., arXiv:2602.06547).
 
 ## Attack Scenarios
 
@@ -352,6 +353,7 @@ For confirmed malicious skill incidents:
 - [Snyk ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)
 - [Check Point Research: Caught in the Hook](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files/)
 - [Antiy CERT: ClawHavoc Campaign Analysis](https://www.antiy.com/)
+- ["Do Not Mention This to the User": Detecting and Understanding Malicious Agent Skills in the Wild (USENIX Security 2026)](https://arxiv.org/abs/2602.06547)
 
 ---
 
