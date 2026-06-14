@@ -12,6 +12,7 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 | Tool                                                                               | License | AST Risks Addressed                             | Language |
 | ---------------------------------------------------------------------------------- | ------- | ----------------------------------------------- | -------- |
 | [AgentMint](https://github.com/aniketh-maddipati/agentmint-python)| MIT     | AST01, AST02, AST03, AST04, AST07, AST08, AST09 | Python   |
+| [SkillSpector](https://github.com/NVIDIA/SkillSpector)| Apache-2.0 | AST01, AST02, AST03, AST04, AST08, AST09, AST10 | Python   |
 
 
 ---
@@ -56,6 +57,49 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 ### Framework Integration
 
 Integrates via hooks with CrewAI, OpenAI Agents SDK, Google ADK, and MCP. Typical integration requires approximately 20 lines of code per framework.
+
+---
+
+## SkillSpector
+
+**Description:** Open-source security scanner for AI agent skills (NVIDIA). Performs two-stage analysis — fast static checks plus optional LLM semantic evaluation — to answer "is this skill safe to install?" before installation. Produces a 0–100 risk score with severity labels and SARIF, JSON, or Markdown reports.
+
+**License:** Apache-2.0  
+**Repository:** [https://github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector)  
+**Install:** `git clone https://github.com/NVIDIA/SkillSpector && make install` (or run via the included Dockerfile)  
+**Dependencies:** Python 3.12+; optional LLM provider (Anthropic / OpenAI-compatible) for semantic analysis; OSV.dev for live CVE lookups
+
+### AST Risks Addressed
+
+**AST01 — Malicious Skills:** Detects malicious patterns and likely-malicious intent via YARA signatures, rogue-agent and trigger-abuse heuristics, and optional LLM intent analysis. Per NVIDIA's SkillSpector project, roughly 5.2% of scanned skills show likely malicious intent.
+
+**AST02 — Supply Chain Compromise:** Supply-chain pattern category plus live OSV.dev CVE lookups against declared dependencies (with offline fallback).
+
+**AST03 — Over-Privileged Skills:** Flags excessive agency, privilege escalation, tool misuse, and MCP least-privilege violations.
+
+**AST04 — Insecure Metadata:** Scans `SKILL.md` prose and metadata for prompt injection and system-prompt leakage.
+
+**AST08 — Poor Scanning:** Directly addresses the scanning gap — combines static analysis (AST-based dangerous-code detection, taint tracking, YARA) across both the code and natural-language layers with optional LLM semantic evaluation, covering 64 patterns across 16 categories.
+
+**AST09 — No Governance:** Emits SARIF v2.1.0 for GitHub Code Scanning and CI gates; the 0–100 risk score supports approval workflows and scan-result inventories.
+
+**AST10 — Cross-Platform Reuse:** Platform-agnostic content-layer scanner (Claude Code, Codex CLI, Gemini CLI) that evaluates skills independently of the runtime.
+
+### Risks Not Addressed
+
+**AST05 — Unsafe Deserialization:** Partial only — dangerous-code and taint analysis can flag unsafe parsing, but it does not sandbox deserialization.  
+**AST06 — Weak Isolation:** Out of scope — a pre-install static/LLM scanner does not provide runtime sandboxing or process isolation.  
+**AST07 — Update Drift:** Partial — re-scanning on update and OSV freshness help, but it does not pin versions or enforce an update policy.
+
+### Known Limitations
+
+- Pre-install analysis: catches issues before installation, not runtime behavior. Pair with sandboxing (AST06) and governance (AST09).
+- The LLM semantic stage requires an API key / model provider; static-only mode (`--no-llm`) runs without one but with reduced intent coverage.
+- Static pattern coverage, like any scanner, can be evaded by sufficiently novel obfuscation — use as one layer of a pipeline, not the sole gate.
+
+### Framework Integration
+
+CLI and Docker; scans Git repos, URLs, zip files, directories, or single files. Emits SARIF v2.1.0 for GitHub Code Scanning and other SARIF consumers, plus JSON and Markdown. Integrates into CI/CD as a pre-merge or pre-publish gate keyed on the risk score.
 
 ---
 

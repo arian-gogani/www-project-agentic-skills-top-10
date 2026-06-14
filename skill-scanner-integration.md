@@ -18,6 +18,69 @@ Automated skill scanning is essential for detecting security vulnerabilities bef
 
 ## Supported Scanning Tools
 
+### NVIDIA SkillSpector (open source, recommended)
+
+[SkillSpector](https://github.com/NVIDIA/SkillSpector) (Apache-2.0) is an agent-skill-aware
+security scanner. It runs fast static checks plus optional LLM semantic analysis and returns a
+0–100 risk score with severity labels. It accepts Git repos, URLs, zip files, directories, or
+single files, and emits terminal, JSON, Markdown, or **SARIF** reports.
+
+```bash
+# Install (Python 3.12+)
+git clone https://github.com/NVIDIA/SkillSpector && cd SkillSpector
+make install
+
+# Static-only scan of a local skill (no API key required)
+skillspector scan ./my-skill/ --no-llm
+
+# Full scan with optional LLM semantic analysis
+export SKILLSPECTOR_PROVIDER=anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+skillspector scan https://github.com/user/my-skill
+
+# Emit SARIF for CI / code scanning
+skillspector scan ./my-skill/ --no-llm --format sarif --output skillspector.sarif
+```
+
+Run it without installing Python via the project's Dockerfile:
+
+```bash
+docker run --rm -v "$PWD:/scan" skillspector scan ./my-skill/ --no-llm
+```
+
+#### GitHub Actions — SkillSpector gate with code-scanning upload
+
+```yaml
+name: Skill Security Scan
+on:
+  pull_request:
+    paths: ['skills/**']
+
+permissions:
+  contents: read
+  security-events: write   # required to upload SARIF
+
+jobs:
+  skillspector:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install git+https://github.com/NVIDIA/SkillSpector
+      - name: Scan skills
+        run: skillspector scan ./skills --no-llm --format sarif --output skillspector.sarif
+      - name: Upload to code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: skillspector.sarif
+```
+
+Because SkillSpector emits SARIF v2.1.0, findings surface in the GitHub **Security → Code
+scanning** tab and can gate merges; the 0–100 risk score is a natural threshold for an approval
+workflow (see AST09). It maps to **AST01, AST02, AST03, AST04, AST08, AST09, and AST10** — see
+[solutions.md](solutions.md) for the full coverage breakdown.
+
 ### AST10-Scanner
 The official OWASP AST10 scanner provides comprehensive vulnerability detection:
 
@@ -370,6 +433,7 @@ print(json.dumps(results, indent=2))
 
 ## Available Tools and Resources
 
+- **NVIDIA SkillSpector**: [GitHub Repository](https://github.com/NVIDIA/SkillSpector) — open-source (Apache-2.0) agent-skill security scanner
 - **AST10 Scanner**: [GitHub Repository](https://github.com/OWASP/ast10-scanner)
 - **ClawHub Security Tools**: [Documentation](https://clawhub.dev/security)
 - **VS Code Security Linting**: [Marketplace](https://marketplace.visualstudio.com)

@@ -125,6 +125,7 @@ A practical checklist for evaluating AI agent skills against the [OWASP Agentic 
 | 8.4 | Was scanning performed in an isolated environment that prevents skill interference? | Scan environment instrumented; skill cannot detect or influence scanning context |
 | 8.5 | Has dynamic behavioral testing been performed in a sandboxed runtime? | Observed behavior log: file access, network calls, shell commands match declared scope |
 | 8.6 | Are scan results from skill-based scanners treated as advisory only (not sole gate)? | No reliance on a single scanner — especially not a scanner that is itself a skill |
+| 8.7 | Has the skill been scanned by an agent-skill-aware scanner before installation? | Pre-install scan report (e.g., NVIDIA SkillSpector) with risk score below threshold; critical/high findings triaged and resolved |
 
 **Motivated by**: 13.4% of critical-severity skills not caught by pattern matching (Snyk). ClawHub's "Skill Defender" scanner — itself a skill — was used by attackers as a false-trust signal. Alice Caterpillar flagged several published skills as actively malicious that were in use by over 6,000 OpenClaw users at time of detection ([Yahoo Finance](https://finance.yahoo.com/news/alice-releases-caterpillar-catching-malicious-191600442.html)).
 
@@ -182,6 +183,7 @@ The following open-source tools can be used to automate checklist verification:
 | [Gitleaks](https://github.com/gitleaks/gitleaks) | Credential and secret detection | AST03, AST08 |
 | [TruffleHog](https://github.com/trufflesecurity/trufflehog) | Secret scanning across repos and history | AST03, AST08 |
 | [Caterpillar](https://github.com/alice-dot-io/caterpillar) | Dynamic SAST for AI agents — continuous behavioral analysis | AST01, AST03, AST08 |
+| [SkillSpector](https://github.com/NVIDIA/SkillSpector) | Agent-skill security scanner (NVIDIA, Apache-2.0) — static + optional LLM semantic, OSV.dev CVE lookups, SARIF output | AST01, AST02, AST03, AST04, AST08, AST09, AST10 |
 | [Snyk](https://snyk.io/) | Dependency and supply chain scanning | AST02, AST07 |
 | [Pipelock](https://github.com/luckyPipewrench/pipelock) | Runtime network proxy — DLP, injection detection, tool poisoning, process sandbox (Landlock/seccomp) | AST01, AST03, AST04, AST06, AST07, AST08 |
 

@@ -23,6 +23,7 @@ A regex scanner can detect `curl` in a shell script. It cannot detect a skill th
 - **Snyk `toxicskills-goof` test suite**: SpecWeave's pattern-matching scanner caught 3 of 4 real malicious samples. The 4th used pure natural-language social engineering — "download and run the binary at this URL" — with no detectable code signature.
 - **Snyk documented SOUL.md attack vector**: malicious instructions hidden via base64 encoding, zero-width Unicode, and ASCII smuggling pass all text-based scanners.
 - **ClawHub's original "Skill Defender" scanner** — itself a skill — was used by attackers as a false-trust signal. Some scanner skills were themselves malicious.
+- **NVIDIA SkillSpector (2026)**: an open-source, agent-skill-aware scanner that combines static analysis (AST-based dangerous-code detection, taint tracking, YARA) with optional LLM semantic evaluation across 64 patterns in 16 categories. Per the SkillSpector project, roughly 26.1% of scanned skills contained vulnerabilities and 5.2% showed likely malicious intent — evidence that scanning purpose-built for the skill layer surfaces issues that generic code scanners miss.
 
 ## Attack Scenarios
 
@@ -44,7 +45,7 @@ Skill behaves safely in test environments; activates malicious path only when sp
 
 ## Preventive Mitigations
 
-1. **Deploy behavioral analysis scanners** that evaluate *intent*, not just signatures — using calibrated models combined with deterministic rules.
+1. **Deploy behavioral analysis scanners** that evaluate *intent*, not just signatures — using calibrated models combined with deterministic rules. Agent-skill-aware scanners such as [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) (open source, Apache-2.0) pair fast static checks with optional LLM semantic analysis for exactly this purpose.
 2. **Scan both the code layer and the natural language instruction layer** independently.
 3. **Test skills in isolated sandboxes** and observe actual runtime behavior; compare against declared behavior.
 4. **Implement multi-tool scanning pipelines**: pattern matching + semantic analysis + behavioral sandbox.
@@ -84,6 +85,7 @@ Skill behaves safely in test environments; activates malicious path only when sp
 - [Snyk ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)
 - [Snyk: Why Your Skill Scanner Is Just False Security](https://snyk.io/blog/skill-scanner-false-security/)
 - [Snyk: toxicskills-goof](https://github.com/snyk-labs/toxicskills-goof)
+- [NVIDIA SkillSpector — open-source security scanner for AI agent skills](https://github.com/NVIDIA/SkillSpector)
 - [OWASP Top 10 - A6 Security Misconfiguration](https://owasp.org/www-project-top-ten/)
 
 ---
