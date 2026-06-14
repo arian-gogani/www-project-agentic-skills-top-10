@@ -187,9 +187,12 @@ def add_logo(slide, on_dark, logo_black, logo_white, x, y, h):
     slide.shapes.add_picture(src, Inches(x), Inches(y), height=Inches(h))
 
 
+VERSION = "v0.5"
+
+
 def footer(slide, page):
     textbox(slide, 0.6, 7.06, 9, 0.3,
-            [("OWASP Agentic Skills Top 10   ·   owasp.org/www-project-agentic-skills-top-10",
+            [(f"OWASP Agentic Skills Top 10   ·   {VERSION}   ·   owasp.org/www-project-agentic-skills-top-10",
               9, MUTED, False)])
     textbox(slide, 11.8, 7.06, 1.0, 0.3, [(f"{page} / 12", 9, MUTED, False)],
             align=PP_ALIGN.RIGHT)
@@ -343,9 +346,12 @@ def build(out_path):
 
 
 def main():
+    global VERSION
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(REPO, "dist", "OWASP-Agentic-Skills-Top10.pptx"))
+    ap.add_argument("--doc-version", dest="ver", default=VERSION)
     args = ap.parse_args()
+    VERSION = args.ver
     build(args.out)
 
 

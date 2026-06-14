@@ -28,6 +28,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEV_COLOR = {"Critical": "#c0252b", "High": "#d9701b", "Medium": "#b88a00", "Low": "#b88a00"}
 NAVY = "#13395c"
 
+VERSION = "v0.5"
 PROJECT_LEAD = "Ken Huang"
 CO_LEADERS = ["Akram Sheriff", "Aonan Guan", "Bhavya Gupta",
               "Fabio Cerullo", "Hammad Atta", "Iftach Orr"]
@@ -96,7 +97,7 @@ def build_html(risks, logo):
         and how to mitigate them</div>
       <div class="cover-rule"></div>
       <div class="cover-meta">
-        Version 1.0 &nbsp;&middot;&nbsp; {today}<br/>
+        {VERSION} &nbsp;&middot;&nbsp; {today}<br/>
         Licensed under CC BY-SA 4.0<br/>
         owasp.org/www-project-agentic-skills-top-10
       </div>
@@ -287,9 +288,13 @@ def build(out_path):
 
 
 def main():
+    global VERSION
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(REPO, "dist", "OWASP-Agentic-Skills-Top10.pdf"))
-    build(ap.parse_args().out)
+    ap.add_argument("--doc-version", dest="ver", default=VERSION)
+    args = ap.parse_args()
+    VERSION = args.ver
+    build(args.out)
 
 
 if __name__ == "__main__":
