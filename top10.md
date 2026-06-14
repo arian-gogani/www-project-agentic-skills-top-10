@@ -81,12 +81,12 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
     <rect x="24" y="142" width="171" height="24" rx="6" fill="#c0252b"/><text x="34" y="158">AST02 · Supply Chain</text>
     <rect x="219" y="110" width="171" height="24" rx="6" fill="#c0252b"/><text x="229" y="126">AST01 · Malicious Skills</text>
     <rect x="219" y="142" width="171" height="24" rx="6" fill="#b88a00"/><text x="229" y="158">AST07 · Update Drift</text>
-    <rect x="414" y="110" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="126">AST05 · Unsafe Deserialization</text>
+    <rect x="414" y="110" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="126">AST05 · Deserialization</text>
     <rect x="414" y="142" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="158">AST03 · Over-Privileged</text>
     <rect x="609" y="110" width="171" height="24" rx="6" fill="#d9701b"/><text x="619" y="126">AST06 · Weak Isolation</text>
     <rect x="804" y="110" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="126">AST08 · Poor Scanning</text>
     <rect x="804" y="142" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="158">AST09 · No Governance</text>
-    <rect x="804" y="174" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="190">AST10 · Cross-Platform Reuse</text>
+    <rect x="804" y="174" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="190">AST10 · Cross-Platform</text>
   </g>
 
   <g font-size="12" fill="#5b6675">
