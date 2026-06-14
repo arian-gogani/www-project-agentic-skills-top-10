@@ -24,6 +24,7 @@ description: "Comprehensive guide to the top 10 security risks in AI agent skill
 ## Table of Contents
 
 - [Overview](#overview)
+- [📊 Visual Top 10 Overview](top10.md)
 - [The Problem: A Crisis Already in Progress](#the-problem-a-crisis-already-in-progress)
 - [What Are Agentic Skills?](#what-are-agentic-skills)
 - [Incident Timeline (2026)](#incident-timeline-2026)
@@ -197,6 +198,8 @@ The following is a condensed timeline of confirmed real-world incidents involvin
 ## Summary Table
 
 Each of the 10 risks is documented in a separate file. Click on the risk name to view the full details.
+
+> 📊 **Prefer a visual map?** See the **[Top 10 Visual Overview](top10.md)** — a skill-lifecycle diagram plus a colour-coded card for every risk.
 
 | # | Risk | Severity | Platforms Affected | Key Mitigation | Real-World Evidence |
 |---|------|----------|--------------------|----------------|---------------------|
