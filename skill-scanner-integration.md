@@ -81,26 +81,11 @@ scanning** tab and can gate merges; the 0–100 risk score is a natural threshol
 workflow (see AST09). It maps to **AST01, AST02, AST03, AST04, AST08, AST09, and AST10** — see
 [solutions.md](solutions.md) for the full coverage breakdown.
 
-### AST10-Scanner
-The official OWASP AST10 scanner provides comprehensive vulnerability detection:
+### OWASP AST10 Scanner Status
 
-```bash
-# Install AST10 Scanner
-npm install -g @owasp/ast10-scanner
-
-# Scan a skill file
-ast10-scan skill.yaml --output report.json
-
-# Scan with custom rules
-ast10-scan skill.yaml --rules custom-rules.json --severity high
-```
-
-#### Features
-- AST10 risk pattern detection
-- Permission analysis
-- Code injection vulnerability scanning
-- Supply chain risk assessment
-- MAESTRO framework compliance checking
+An OWASP-maintained `@owasp/ast10-scanner` package is not currently published.
+Until one exists, use the open-source scanners listed above and map their
+findings to the AST01-AST10 taxonomy in reports and CI output.
 
 ### Platform-Specific Scanners
 
@@ -159,33 +144,24 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '18'
+          python-version: '3.12'
 
-      - name: Install AST10 Scanner
-        run: npm install -g @owasp/ast10-scanner
+      - name: Install SkillSpector
+        run: pip install git+https://github.com/NVIDIA/SkillSpector
 
       - name: Scan Skills
-        run: |
-          find skills -name "*.md" -o -name "*.json" -o -name "*.yaml" | \
-          xargs ast10-scan --output security-report.json
+        run: skillspector scan ./skills --no-llm --format sarif --output skillspector.sarif
 
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: security-report
-          path: security-report.json
-
-      - name: Fail on High Severity
-        run: |
-          if jq '.vulnerabilities[] | select(.severity == "high")' security-report.json | grep -q .; then
-            echo "High severity vulnerabilities found!"
-            exit 1
-          fi
+          path: skillspector.sarif
 ```
 
 #### GitLab CI Example
@@ -195,11 +171,11 @@ stages:
 
 security_scan:
   stage: security
-  image: node:18
+  image: python:3.12
   before_script:
-    - npm install -g @owasp/ast10-scanner
+    - pip install git+https://github.com/NVIDIA/SkillSpector
   script:
-    - find skills -name "*.md" -o -name "*.json" -o -name "*.yaml" | xargs ast10-scan --gitlab-report
+    - skillspector scan ./skills --no-llm --format sarif --output gl-sast-report.json
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -216,12 +192,13 @@ pip install pre-commit
 
 # Create .pre-commit-config.yaml
 repos:
-  - repo: https://github.com/owasp/ast10-scanner
-    rev: v1.0.0
+  - repo: local
     hooks:
-      - id: ast10-scan
+      - id: skillspector-scan
+        name: SkillSpector scan
+        entry: skillspector scan . --no-llm
+        language: system
         files: \.(md|json|yaml)$
-        args: [--severity, high]
 ```
 
 ### Registry Integration
@@ -434,16 +411,14 @@ print(json.dumps(results, indent=2))
 ## Available Tools and Resources
 
 - **NVIDIA SkillSpector**: [GitHub Repository](https://github.com/NVIDIA/SkillSpector) — open-source (Apache-2.0) agent-skill security scanner
-- **AST10 Scanner**: [GitHub Repository](https://github.com/OWASP/ast10-scanner)
-- **ClawHub Security Tools**: [Documentation](https://clawhub.dev/security)
 - **VS Code Security Linting**: [Marketplace](https://marketplace.visualstudio.com)
 
 ## Contributing
 
 To contribute new scanning rules or improve existing scanners:
 
-1. Fork the AST10 Scanner repository
-2. Add your rule or improvement
+1. Fork the scanner repository you use
+2. Add your rule, detector, or report-mapping improvement
 3. Submit a pull request with test cases
 4. Ensure backward compatibility
 

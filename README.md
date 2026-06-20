@@ -654,7 +654,7 @@ AST10 fills the gap between protocol-layer and model-layer security — a gap th
 ### Standards and Frameworks
 - **OWASP AIVSS Project** (2025) — https://aivss.owasp.org
 - **OWASP LLM Top 10** (2025) — https://owasp.org/www-project-top-10-for-large-language-model-applications/
-- **OWASP Agentic AI Top 10** (Dec 2025) — https://owasp.org/www-project-agentic-ai-threats/
+- **OWASP Top 10 for Agentic Applications** (2026) — https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
 - **NIST AI RMF** — https://airc.nist.gov/
 - **ISO/IEC 42001** (AI Management System) — https://www.iso.org/standard/81230.html
 - **EU AI Act** (enforced Aug 2026) — https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689
