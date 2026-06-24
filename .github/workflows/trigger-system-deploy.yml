@@ -1,0 +1,11 @@
+name: Trigger system Pages build
+on:
+  workflow_dispatch:
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Pages build
+        run: gh api repos/${{ github.repository }}/pages/builds -X POST
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
