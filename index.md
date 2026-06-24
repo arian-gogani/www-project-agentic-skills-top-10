@@ -203,18 +203,29 @@ Each of the 10 risks is documented in a separate file. Click on the risk name to
 
 > 📊 **Prefer a visual map?** See the **[Top 10 Visual Overview](/www-project-agentic-skills-top-10/top10)** — a skill-lifecycle diagram plus a colour-coded card for every risk.
 
-| # | Risk | Severity | Platforms Affected | Key Mitigation | Real-World Evidence |
-|---|------|----------|--------------------|----------------|---------------------|
-| [AST01](ast01.md) | Malicious Skills | Critical | All | Merkle root signing, registry scanning | ClawHavoc (1,184 skills), ToxicSkills (76 payloads) |
-| [AST02](ast02.md) | Supply Chain Compromise | Critical | All | Registry transparency, provenance tracking | ClawHub collapse, Claude Code CVE-2025-59536 |
-| [AST03](ast03.md) | Over-Privileged Skills | High | All | Least-privilege manifests, schema validation | 280+ credential-leaking skills (Snyk, Feb 2026) |
-| [AST04](ast04.md) | Insecure Metadata | High | All | Static analysis, safe parsers, sandboxed loading | Fake "Google" skill impersonation; YAML payload delivery in SKILL.md |
-| [AST05](ast05.md) | Untrusted External Instructions | High | All | Source inventory, content pinning and inlining, continuous rescanning | Anthropic docs warn fetched URLs "may contain malicious instructions"; Air's "Story of Skills" PoC bypassed all scanners and proved a possible takeover of 26,000 agents via untrusted external instructions |
-| [AST06](ast06.md) | Weak Isolation | High | All | Containerization, Docker sandboxing | OpenClaw host-mode execution, 135K exposed instances |
-| [AST07](ast07.md) | Update Drift | Medium | All | Immutable pinning, hash verification | ClawJacked (CVE-2026-28363), patch-lag exploitation |
-| [AST08](ast08.md) | Poor Scanning | Medium | All | Semantic + behavioral multi-tool pipeline | Pattern-matcher bypass via natural-language injection |
-| [AST09](ast09.md) | No Governance | Medium | All | Skill inventories, agentic identity controls | 53K exposed instances with no SOC visibility |
-| [AST10](ast10.md) | Cross-Platform Reuse | Medium | All | Universal YAML format | Malicious skills ported across ClawHub, skills.sh |
+<div class="ast-summary-table" style="overflow-x:auto">
+
+| # | Risk | Severity | Key Mitigation | Real-World Evidence |
+|---|------|----------|----------------|---------------------|
+| [AST01](ast01.md) | Malicious Skills | Critical | Merkle root signing, registry scanning | ClawHavoc (1,184 skills), ToxicSkills (76 payloads) |
+| [AST02](ast02.md) | Supply Chain Compromise | Critical | Registry transparency, provenance tracking | ClawHub collapse, Claude Code CVE-2025-59536 |
+| [AST03](ast03.md) | Over-Privileged Skills | High | Least-privilege manifests, schema validation | 280+ credential-leaking skills (Snyk, Feb 2026) |
+| [AST04](ast04.md) | Insecure Metadata | High | Static analysis, safe parsers, sandboxed loading | Fake "Google" skill impersonation; YAML payload delivery in SKILL.md |
+| [AST05](ast05.md) | Untrusted External Instructions | High | Source inventory, content pinning, continuous rescanning | Air PoC bypassed all scanners; 26,000 agents at risk |
+| [AST06](ast06.md) | Weak Isolation | High | Containerization, Docker sandboxing | OpenClaw host-mode execution, 135K exposed instances |
+| [AST07](ast07.md) | Update Drift | Medium | Immutable pinning, hash verification | ClawJacked (CVE-2026-28363), patch-lag exploitation |
+| [AST08](ast08.md) | Poor Scanning | Medium | Semantic + behavioral multi-tool pipeline | Pattern-matcher bypass via natural-language injection |
+| [AST09](ast09.md) | No Governance | Medium | Skill inventories, agentic identity controls | 53K exposed instances with no SOC visibility |
+| [AST10](ast10.md) | Cross-Platform Reuse | Medium | Universal YAML format | Malicious skills ported across ClawHub, skills.sh |
+
+</div>
+
+<style>
+.ast-summary-table table th:nth-child(2),
+.ast-summary-table table td:nth-child(2) { min-width: 180px; }
+.ast-summary-table table th:nth-child(3),
+.ast-summary-table table td:nth-child(3) { min-width: 90px; }
+</style>
 
 ---
 
