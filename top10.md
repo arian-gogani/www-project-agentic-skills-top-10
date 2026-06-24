@@ -83,7 +83,6 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
     <rect x="219" y="142" width="171" height="24" rx="6" fill="#b88a00"/><text x="229" y="158">AST07 · Update Drift</text>
     <rect x="414" y="110" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="126">AST05 · External Instructions</text>
     <rect x="414" y="142" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="158">AST03 · Over-Privileged</text>
-    <rect x="414" y="174" width="171" height="24" rx="6" fill="#d9701b"/><text x="424" y="190">AST04 · Deserialization</text>
     <rect x="609" y="110" width="171" height="24" rx="6" fill="#d9701b"/><text x="619" y="126">AST06 · Weak Isolation</text>
     <rect x="804" y="110" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="126">AST08 · Poor Scanning</text>
     <rect x="804" y="142" width="171" height="24" rx="6" fill="#b88a00"/><text x="814" y="158">AST09 · No Governance</text>
