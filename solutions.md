@@ -12,6 +12,7 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 | Tool                                                                               | License | AST Risks Addressed                             | Language |
 | ---------------------------------------------------------------------------------- | ------- | ----------------------------------------------- | -------- |
 | [AgentMint](https://github.com/aniketh-maddipati/agentmint-python)| MIT     | AST01, AST02, AST03, AST04, AST07, AST08, AST09 | Python   |
+| [SkilLock](https://github.com/skills-lock/skil-lock)| Apache-2.0 | AST03, AST04, AST07, AST08, AST09, AST10 | Go   |
 | [SkillSpector](https://github.com/NVIDIA/SkillSpector)| Apache-2.0 | AST01, AST02, AST03, AST04, AST08, AST09, AST10 | Python   |
 
 
@@ -57,6 +58,48 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 ### Framework Integration
 
 Integrates via hooks with CrewAI, OpenAI Agents SDK, Google ADK, and MCP. Typical integration requires approximately 20 lines of code per framework.
+
+---
+
+## SkilLock
+
+**Description:** Behavior-layer lockfile and capability-delta PR review for AI agent skills. Statically parses each skill's `SKILL.md` fenced bash blocks and bundled scripts to record the *observed* capability surface (shell, network, file reads/writes, tool grants, scripts) into a committed `skills.lock` file, then blocks unapproved drift in CI and shows the capability delta in every pull request.
+
+**License:** Apache-2.0 (the `SPEC.md` interop spec is CC BY 4.0)  
+**Repository:** [https://github.com/skills-lock/skil-lock](https://github.com/skills-lock/skil-lock)  
+**Install:** `go install github.com/skills-lock/skil-lock/cmd/skil-lock@latest` (also `brew install skills-lock/tap/skil-lock`, or download a SHA-256-checksummed release binary)  
+**Dependencies:** Go 1.22+ at build time; ships as a single static binary with no runtime dependencies (cobra, goldmark, yaml.v3 build-time only)
+
+### AST Risks Addressed
+
+**AST03 — Over-Privileged Skills:** Records the observed capability surface (shell commands, network URLs, file reads/writes, tool grants) parsed from `SKILL.md` and bundled scripts, independent of what the frontmatter declares. Per SkilLock's own [scan of 17,065 public skills](https://github.com/skills-lock/skil-lock/blob/main/docs/ecosystem-scan-2026-06.md), 38.8% executed shell but only 4.0% declared it; the `SKL-SHELL` / `SKL-NETWORK` / `SKL-TOOLS` detectors surface that declared-versus-observed gap so reviewers can right-size permissions.
+
+**AST04 — Insecure Metadata:** The core check is manifest-versus-behavior mismatch — capabilities a skill actually exercises but does not declare in its `allowed-tools` / frontmatter are flagged in the PR, making under-declared or misleading metadata visible at review time rather than at runtime.
+
+**AST07 — Update Drift:** The committed `skills.lock` pins the approved behavior surface; on every change SkilLock computes a capability delta against that baseline and fails the CI gate when a skill's observed behavior drifts from what was last approved. A PR-scoped override file records explicit, auditable approvals. This is the tool's primary function.
+
+**AST08 — Poor Scanning:** Six deterministic detectors (`SKL-SHELL`, `SKL-NETWORK`, `SKL-FILE-READ`, `SKL-FILE-WRITE`, `SKL-TOOLS`, `SKL-SCRIPTS`) parse fenced bash blocks and bundled scripts to extract the behavior surface. Detection is deterministic and parse-based — no semantic or LLM analysis — so results are reproducible in CI, with the coverage limits that implies (see Known Limitations).
+
+**AST09 — No Governance:** `skills.lock` is a committed, human-readable inventory of every skill's approved capability surface. The GitHub Action posts a per-PR capability-delta comment and emits SARIF v2.1.0 to GitHub Code Scanning, providing an auditable approval trail and a queryable inventory kept in version control.
+
+**AST10 — Cross-Platform Reuse:** Parses the shared `SKILL.md` content layer used by both Claude Code and Codex, evaluating skill behavior independently of the runtime. It validates the existing shared format across the two supported platforms rather than defining a new universal format (see Known Limitations).
+
+### Risks Not Addressed
+
+**AST01 — Malicious Skills:** Partial. Capability-delta detection flags a previously-approved skill that gains dangerous behavior (new shell / network / exfiltration surface) in an update, but SkilLock performs no first-party malware or intent classification (no signatures or heuristics) and cannot judge a never-seen skill as malicious on first sight.  
+**AST02 — Supply Chain Compromise:** Partial. Per-file content digests of bundled scripts detect tampered or newly-added scripts on update; SkilLock does not verify registry provenance or upstream signatures of the skill source itself.  
+**AST05 — Untrusted External Instructions:** Partial. The `SKL-NETWORK` detector inventories the external hosts and URLs a skill references — useful for spotting and tracking external sources — but SkilLock does not pin, hash-verify, or sandbox the content fetched from them. (The deserialization concern, now folded into AST04, is likewise out of scope: frontmatter is parsed with a safe YAML library, but SkilLock does not analyze or sandbox deserialization the skills themselves perform.)  
+**AST06 — Weak Isolation:** Not addressed. SkilLock is a post-install, CI-time review tool and provides no runtime sandboxing or process isolation (a runtime guard is explicitly out of scope for v1).
+
+### Known Limitations
+
+- Behavior is extracted by static parsing of fenced bash and bundled scripts; dynamically constructed commands, heavy obfuscation, or capabilities exercised only at runtime can evade it. Use it as a review-layer gate, not a sandbox.
+- Deterministic detectors only — no semantic or LLM intent analysis. Pair with a pre-install scanner (AST01 / AST08) and runtime isolation (AST06).
+- It detects *change* against an approved baseline; the strength of the gate depends on that baseline being reviewed carefully when first locked.
+
+### Framework Integration
+
+CLI (`scan`, `lock`, `init --baseline`, `diff`, `verify`, `ci`) plus a GitHub Action that posts the capability delta as a PR comment and uploads SARIF v2.1.0 to GitHub Code Scanning. Supports Claude Code and Codex skills (same `SKILL.md` format). Runs on ubuntu and macos GitHub-hosted runners (amd64 + arm64).
 
 ---
 
