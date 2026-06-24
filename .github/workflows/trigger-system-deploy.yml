@@ -1,6 +1,9 @@
 name: Trigger system Pages build
 on:
   workflow_dispatch:
+permissions:
+  pages: write
+  id-token: write
 jobs:
   trigger:
     runs-on: ubuntu-latest
