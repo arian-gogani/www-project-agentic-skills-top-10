@@ -305,6 +305,7 @@ instructions: |
 - [AST02 — Supply Chain Compromise](ast02.md): Often the delivery mechanism for malicious skills.
 - [AST03 — Over-Privileged Skills](ast03.md): Malicious skills exploit excessive permissions.
 - [AST04 — Insecure Metadata](ast04.md): Brand impersonation enables malicious skill distribution.
+- [AST05 — Untrusted External Instructions](ast05.md): A malicious author can hide the payload in referenced external content, keeping the skill body clean.
 - [AST08 — Poor Scanning](ast08.md): Ineffective detection allows malicious skills to proliferate.
 
 ## Reference Materials

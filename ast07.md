@@ -75,6 +75,7 @@ Skill directory is writable; attacker modifies `SKILL.md` mid-session; agent pic
 - **AST01 (Malicious Skills)**: Update drift can introduce malicious code through compromised updates.
 - **AST02 (Supply Chain Compromise)**: Unverified updates are a supply chain attack vector.
 - **AST04 (Insecure Metadata)**: Update metadata may be spoofed to hide malicious changes.
+- **AST05 (Untrusted External Instructions)**: Referenced external content can drift maliciously with no version change to the pinned skill.
 - **AST08 (Poor Scanning)**: Updated skills may not be re-scanned, allowing new vulnerabilities.
 - **AST09 (No Governance)**: Lack of update policies enables uncontrolled drift.
 

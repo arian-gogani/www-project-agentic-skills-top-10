@@ -44,7 +44,7 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 
 ### Risks Not Addressed
 
-**AST05 — Unsafe Deserialization:** Does not parse skill manifests or configs from untrusted sources.  
+**AST04 — Insecure Metadata (deserialization):** Does not parse skill manifests or configs from untrusted sources.  
 **AST06 — Weak Isolation:** Runs in-process. Does not provide containerization or sandbox isolation.  
 **AST10 — Cross-Platform Reuse:** Receipt format is tool-specific; does not yet implement the Universal Skill Format.
 
@@ -87,7 +87,7 @@ Integrates via hooks with CrewAI, OpenAI Agents SDK, Google ADK, and MCP. Typica
 
 ### Risks Not Addressed
 
-**AST05 — Unsafe Deserialization:** Partial only — dangerous-code and taint analysis can flag unsafe parsing, but it does not sandbox deserialization.  
+**AST04 — Insecure Metadata (deserialization):** Partial only — dangerous-code and taint analysis can flag unsafe parsing, but it does not sandbox deserialization.  
 **AST06 — Weak Isolation:** Out of scope — a pre-install static/LLM scanner does not provide runtime sandboxing or process isolation.  
 **AST07 — Update Drift:** Partial — re-scanning on update and OSV freshness help, but it does not pin versions or enforce an update policy.
 

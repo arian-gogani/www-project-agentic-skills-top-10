@@ -107,6 +107,7 @@ def verify_transparency_log(skill_name: str, expected_hash: str) -> bool:
 ## Related Risks
 
 - [AST01 — Malicious Skills](ast01.md): Supply chain compromise enables delivery of malicious skills.
+- [AST05 — Untrusted External Instructions](ast05.md): Externally referenced documentation is a supply-chain surface that code-integrity controls cannot pin or verify.
 - [AST07 — Update Drift](ast07.md): Lack of immutable updates exacerbates supply chain risks.
 - [AST08 — Poor Scanning](ast08.md): Inadequate scanning misses supply chain vulnerabilities.
 - [AST10 — Cross-Platform Reuse](ast10.md): Inconsistent security across platforms creates supply chain gaps.

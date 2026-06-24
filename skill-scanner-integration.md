@@ -287,9 +287,9 @@ class SkillScanner:
         if 'sudo' in content or 'admin' in content.lower():
             self.add_vulnerability('AST03', 'medium', 'Privilege escalation patterns detected')
 
-        # AST05: Input validation
+        # AST04: Unsafe deserialization / code injection
         if 'eval(' in content or 'exec(' in content:
-            self.add_vulnerability('AST05', 'high', 'Code injection vulnerabilities detected')
+            self.add_vulnerability('AST04', 'high', 'Code injection vulnerabilities detected')
 
     def scan_json(self, data: Dict):
         """Scan JSON skill files"""

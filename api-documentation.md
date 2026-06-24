@@ -235,7 +235,7 @@ Submit a skill for comprehensive security scanning.
   "skill_url": "https://example.com/skill.yaml",
   "callback_url": "https://your-app.com/webhook/scan-complete",
   "scan_options": {
-    "rules": ["AST01", "AST03", "AST05"],
+    "rules": ["AST01", "AST03", "AST04"],
     "timeout": 300,
     "sandbox": true
   }
