@@ -12,6 +12,7 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 | Tool                                                                               | License | AST Risks Addressed                             | Language |
 | ---------------------------------------------------------------------------------- | ------- | ----------------------------------------------- | -------- |
 | [AgentMint](https://github.com/aniketh-maddipati/agentmint-python)| MIT     | AST01, AST02, AST03, AST04, AST07, AST08, AST09 | Python   |
+| [Nobulex](https://github.com/arian-gogani/nobulex)| MIT     | AST03, AST04, AST07, AST09                       | Python, TypeScript |
 | [SkilLock](https://github.com/skills-lock/skil-lock)| Apache-2.0 | AST03, AST04, AST07, AST08, AST09, AST10 | Go   |
 | [SkillSpector](https://github.com/NVIDIA/SkillSpector)| Apache-2.0 | AST01, AST02, AST03, AST04, AST08, AST09, AST10 | Python   |
 
@@ -58,6 +59,46 @@ Submit a PR adding your tool using the template at the bottom of this page. All 
 ### Framework Integration
 
 Integrates via hooks with CrewAI, OpenAI Agents SDK, Google ADK, and MCP. Typical integration requires approximately 20 lines of code per framework.
+
+---
+
+## Nobulex
+
+**Description:** Cryptographic receipt layer for AI agent actions. Produces Ed25519-signed, JCS-canonical (RFC 8785) bilateral receipts — a pre-execution admission record and a post-execution outcome record — linked by a content-derived `action_ref = SHA-256(JCS({agent_id, action_type, scope, timestamp_ms}))`. Receipts are independently verifiable against the issuer's public key without operator cooperation.
+
+**License:** MIT  
+**Repository:** [https://github.com/arian-gogani/nobulex](https://github.com/arian-gogani/nobulex)  
+**Install:** `pip install nobulex` (Python) or `npm install @nobulex/core` (TypeScript)  
+**Dependencies:** Python — `cryptography`, `rfc8785`. TypeScript — `@noble/ed25519`, `canonicalize`.
+
+### AST Risks Addressed
+
+**AST03 — Over-Privileged Skills:** Each receipt binds the action to the `scope` field at decision time. A scope mismatch between the admission receipt (what was authorized) and the outcome receipt (what executed) produces non-matching `action_ref` hashes, detectable without trusting the runtime. The denied-before-dispatch path is first-class: a DENY decision produces an admission receipt; absence of an outcome receipt with that `attempt_id` proves the action was blocked rather than silently dropped.
+
+**AST04 — Insecure Metadata:** The signed bilateral receipt covers `agent_id`, `action_type`, `scope`, `policy_version`, and `timestamp_ms` under one Ed25519 signature. Modifying any field invalidates the signature; the canonical preimage is recomputable from the receipt fields by any third party.
+
+**AST07 — Update Drift:** `policy_version` is bound at decision time inside the admission receipt. A policy change between admission and execution is detectable because the receipt records the version that authorized the action, not the version in effect at audit time.
+
+**AST09 — No Governance:** Hash-chained receipts produce a tamper-evident audit trail where each receipt references the prior receipt's digest. The chain is exportable as a structured package and verifiable offline against the agent's published Ed25519 public key — directly supporting the operator-independent verification property that EU AI Act Article 12 (enforcement August 2, 2026) requires.
+
+### Risks Not Addressed
+
+**AST01 — Malicious Skills:** Out of scope — does not scan, classify, or analyze skill code or intent. Pair with a scanner (e.g., SkillSpector) for pre-install detection.  
+**AST02 — Supply Chain Compromise:** Out of scope — does not verify upstream provenance of the skill itself, only records the actions a skill takes once running.  
+**AST05 — Untrusted External Instructions:** Out of scope — does not inspect or sandbox external content fetched at runtime.  
+**AST06 — Weak Isolation:** Out of scope — provides no runtime sandboxing or process isolation. A compromised agent process can choose not to emit receipts; the audit trail then shows absence, not a forged execution.  
+**AST08 — Poor Scanning:** Out of scope — not a scanner.  
+**AST10 — Cross-Platform Reuse:** Partial — receipts are framework-agnostic at the field level (the receipt format is plain JSON + Ed25519), but the receipt records skill *calls*, not skill *definitions*, so it does not contribute to a Universal Skill Format.
+
+### Known Limitations
+
+- Receipts prove what the agent *self-reported* about its actions. A compromised agent can refuse to emit receipts; absence in the chain is detectable but does not by itself prove what the agent actually did externally. Pair with isolation (AST06) for runtime enforcement.
+- Receipt verification is per-record. Set completeness (proving no receipts were dropped between two known ones) requires additional sequence-number and lifecycle fields not present in the current 4-field preimage. Verifiers checking contiguity need to pin the scope themselves.
+- No on-chain anchoring in the core SDK. Long-horizon non-repudiation requires composition with a separate timestamping layer (RFC 3161 TSA, on-chain anchor, or transparency log).
+
+### Framework Integration
+
+Wraps any tool-call boundary: pre-execution admission emit + post-execution outcome emit. Integration examples shipped for LangChain, LangGraph, CrewAI, AutoGen, and direct MCP tool wrappers. Typical integration is one decorator or middleware function per agent. Benchmark: ~13,700 receipts/second on a 2024 M-series laptop, single-process (reproducible via `benchmark/run.py` in the repo).
 
 ---
 
