@@ -203,7 +203,7 @@ Each of the 10 risks is documented in a separate file. Click on the risk name to
 
 > 📊 **Prefer a visual map?** See the **[Top 10 Visual Overview](/www-project-agentic-skills-top-10/top10)** — a skill-lifecycle diagram plus a colour-coded card for every risk.
 
-<div class="ast-summary-table" style="overflow-x:auto">
+<div class="ast-summary-table" markdown="1" style="overflow-x:auto">
 
 | # | Risk | Severity | Key Mitigation | Real-World Evidence |
 |---|------|----------|----------------|---------------------|
