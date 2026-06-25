@@ -75,14 +75,8 @@ for file in *.md ast*.md; do
             esac
             # Remove anchor links
             clean_link=$(echo "$link" | cut -d'#' -f1)
-            # Jekyll serves each page at <name>/ (one level deep), so ../foo.md
-            # from top10.md resolves back to foo.md at the repo root.
-            resolved="$clean_link"
-            if [[ "$clean_link" == ../* ]]; then
-                resolved="${clean_link#../}"
-            fi
-            if [ ! -f "$resolved" ]; then
-                echo "   ❌ Broken link in $file: $clean_link (resolved: $resolved)"
+            if [ ! -f "$clean_link" ]; then
+                echo "   ❌ Broken link in $file: $clean_link"
                 broken_links=$((broken_links + 1))
             fi
         done
