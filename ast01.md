@@ -58,7 +58,7 @@ Skills that establish persistent WebSocket connections to attacker C2 servers, e
 
 ## Preventive Mitigations
 
-1. **Require cryptographic signatures (ed25519)** on all published skills; reject unsigned installs.
+1. **Require cryptographic signatures (ed25519)** on all published skills; reject unsigned installs. Bind each signature to a *resolvable, revocable publisher identity* (a key id, a publisher identifier such as a domain or `did:web`, and a published verification key) — not just a bare key — so a compromised signer can be revoked. A signature proves **authorship, not safety**: a verified publisher can still ship malicious content, so signing composes with behavioral scanning (mitigation 3) and reputation (mitigation 6) rather than replacing them.
 2. **Implement Merkle root signing** for skill registries.
 3. **Scan skills at publish time and at install time** using behavioral analysis (not just pattern matching).
 4. **Isolate skill execution** in containers or sandboxes.
