@@ -44,12 +44,13 @@ Compromise a trusted skill author's account, push a backdoored version.
 
 ## Preventive Mitigations
 
-1. **Implement skill provenance tracking**: link each published skill to a verified code-signing identity.
+1. **Implement skill provenance tracking**: link each published skill to a verified code-signing identity, and have the signature cover a *canonical digest* of `SKILL.md` plus every declared resource file, so any post-publish tampering invalidates it. Standard signing schemes apply (e.g. `ES256` / `ed25519`); until skill formats expose a first-class field, the binding can live in the `SKILL.md` `metadata` extension point.
 2. **Require transparency logs** for all registry operations (publish, update, delete) — similar to Certificate Transparency.
 3. **Pin all nested dependencies** to immutable hashes (`sha256:`), not version ranges.
 4. **Treat repository configuration files** (hooks, `.claude/settings.json`, `ANTHROPIC_BASE_URL`) as executable code and apply trust gates accordingly.
 5. **Scan recursive dependency trees**, not just top-level skill files.
 6. **Support an internal skill mirror / allowlist** for enterprise deployments.
+7. **Provide revocation infrastructure**: support revoking a compromised signing key (invalidating every skill signed with it), a single skill version by content digest, or an entire publisher; have hosts consult a revocation endpoint at load time and cache its state within a bounded freshness window.
 
 ### Code Example: Dependency Pinning
 
@@ -155,7 +156,10 @@ Supply chain compromise indicators:
 - [Snyk ToxicSkills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)
 - [Check Point Research: Caught in the Hook](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files/)
 - [Antiy CERT: ClawHavoc Campaign Analysis](https://www.antiy.com/)
+- [OpenAPI Extensions Registry — `x-agent-trust`](https://spec.openapis.org/registry/extension/x-agent-trust.html)
+- [IETF Internet-Draft — `draft-sharif-agent-payment-trust`](https://datatracker.ietf.org/doc/draft-sharif-agent-payment-trust/)
+- [JWA `ES256` — RFC 7518 §3.1](https://datatracker.ietf.org/doc/html/rfc7518#section-3.1)
 
 ---
 
-*Last updated: March 2026*
+*Last updated: June 2026*
