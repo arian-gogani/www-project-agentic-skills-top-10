@@ -106,7 +106,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
 
 <div class="ast-grid">
 
-<a class="ast-card crit" href="ast01.md">
+<a class="ast-card crit" href="/www-project-agentic-skills-top-10/ast01.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0v-2a4 4 0 0 1 4-4z"/><path d="M10 8 8.5 6.5M14 8l1.5-1.5M8 12H4M20 12h-4M8 16l-2 1.5M16 16l2 1.5"/></svg></span>
     <span class="ast-id">AST01</span><span class="ast-pill crit">Critical</span>
@@ -116,7 +116,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST01 →</div>
 </a>
 
-<a class="ast-card crit" href="ast02.md">
+<a class="ast-card crit" href="/www-project-agentic-skills-top-10/ast02.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M13.5 10.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1"/></svg></span>
     <span class="ast-id">AST02</span><span class="ast-pill crit">Critical</span>
@@ -126,7 +126,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST02 →</div>
 </a>
 
-<a class="ast-card high" href="ast03.md">
+<a class="ast-card high" href="/www-project-agentic-skills-top-10/ast03.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="3.2"/><path d="M11.2 12H20M17 12v3M20 12v2.5"/></svg></span>
     <span class="ast-id">AST03</span><span class="ast-pill high">High</span>
@@ -136,7 +136,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST03 →</div>
 </a>
 
-<a class="ast-card high" href="ast04.md">
+<a class="ast-card high" href="/www-project-agentic-skills-top-10/ast04.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4h-7L3 14l7 7 10-10V4z"/><circle cx="16.3" cy="7.7" r="1.3"/></svg></span>
     <span class="ast-id">AST04</span><span class="ast-pill high">High</span>
@@ -146,7 +146,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST04 →</div>
 </a>
 
-<a class="ast-card high" href="ast05.md">
+<a class="ast-card high" href="/www-project-agentic-skills-top-10/ast05.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg></span>
     <span class="ast-id">AST05</span><span class="ast-pill high">High</span>
@@ -156,7 +156,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST05 →</div>
 </a>
 
-<a class="ast-card high" href="ast06.md">
+<a class="ast-card high" href="/www-project-agentic-skills-top-10/ast06.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M10.5 9l3 3-3 3"/></svg></span>
     <span class="ast-id">AST06</span><span class="ast-pill high">High</span>
@@ -166,7 +166,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST06 →</div>
 </a>
 
-<a class="ast-card med" href="ast07.md">
+<a class="ast-card med" href="/www-project-agentic-skills-top-10/ast07.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 16"/><path d="M4 20v-4h4"/></svg></span>
     <span class="ast-id">AST07</span><span class="ast-pill med">Medium</span>
@@ -176,7 +176,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST07 →</div>
 </a>
 
-<a class="ast-card med" href="ast08.md">
+<a class="ast-card med" href="/www-project-agentic-skills-top-10/ast08.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-3.8-3.8"/></svg></span>
     <span class="ast-id">AST08</span><span class="ast-pill med">Medium</span>
@@ -186,7 +186,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST08 →</div>
 </a>
 
-<a class="ast-card med" href="ast09.md">
+<a class="ast-card med" href="/www-project-agentic-skills-top-10/ast09.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
     <span class="ast-id">AST09</span><span class="ast-pill med">Medium</span>
@@ -196,7 +196,7 @@ A one-screen map of all ten risks. The diagram shows **where** each risk attacks
   <div class="ast-more">Read AST09 →</div>
 </a>
 
-<a class="ast-card med" href="ast10.md">
+<a class="ast-card med" href="/www-project-agentic-skills-top-10/ast10.html">
   <div class="ast-top">
     <span class="ast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="9" height="6" rx="1.2"/><rect x="12" y="13" width="9" height="6" rx="1.2"/><path d="M12 8h3.5a2 2 0 0 1 2 2v1.5M12 16H8.5a2 2 0 0 1-2-2v-1.5"/></svg></span>
     <span class="ast-id">AST10</span><span class="ast-pill med">Medium</span>
