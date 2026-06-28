@@ -23,6 +23,7 @@ The barrier to publishing on ClawHub was a `SKILL.md` file and a GitHub account 
 - **Claude Code CVE-2025-59536 / CVE-2026-21852**: repository configuration files (`.claude/settings.json`, hooks) become execution paths; simply cloning and opening a malicious repo triggers RCE and API key exfiltration before the user sees any dialog.
 - **Dependency confusion**: a skill's `package.json` or `requirements.txt` pulls a typosquatted nested dependency containing the actual payload — the surface skill appears clean.
 - **Snyk-documented attack**: skill named "Summarize YouTube Videos" imports `yutube-dl-core` instead of a legitimate package; nested dependency installs a backdoor.
+- **Trail of Bits (Jun 3, 2026)**: public skill marketplaces (skills.sh, ClawHub) run a "ship-first, secure-later" model with one-click install and no meaningful vetting — and the scanners meant to backstop them were all bypassed in under an hour (see AST08). Their recommendation is the traditional supply-chain one: curate dependencies in an internal/approved marketplace, pin versions, and control who can publish or update — automated scanning cannot replace that.
 
 ## Attack Scenarios
 
@@ -174,6 +175,7 @@ Supply chain compromise indicators:
 - [OpenAPI Extensions Registry — `x-agent-trust`](https://spec.openapis.org/registry/extension/x-agent-trust.html)
 - [IETF Internet-Draft — `draft-sharif-agent-payment-trust`](https://datatracker.ietf.org/doc/draft-sharif-agent-payment-trust/)
 - [JWA `ES256` — RFC 7518 §3.1](https://datatracker.ietf.org/doc/html/rfc7518#section-3.1)
+- [Trail of Bits — The Sorry State of Skill Distribution (2026)](https://blog.trailofbits.com/2026/06/03/the-sorry-state-of-skill-distribution/)
 
 ---
 

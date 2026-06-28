@@ -24,6 +24,7 @@ A regex scanner can detect `curl` in a shell script. It cannot detect a skill th
 - **Snyk documented SOUL.md attack vector**: malicious instructions hidden via base64 encoding, zero-width Unicode, and ASCII smuggling pass all text-based scanners.
 - **ClawHub's original "Skill Defender" scanner** — itself a skill — was used by attackers as a false-trust signal. Some scanner skills were themselves malicious.
 - **NVIDIA SkillSpector (2026)**: an open-source, agent-skill-aware scanner that combines static analysis (AST-based dangerous-code detection, taint tracking, YARA) with optional LLM semantic evaluation across 64 patterns in 16 categories. Per the SkillSpector project, roughly 26.1% of scanned skills contained vulnerabilities and 5.2% showed likely malicious intent — evidence that scanning purpose-built for the skill layer surfaces issues that generic code scanners miss.
+- **Trail of Bits (Jun 3, 2026), *The Sorry State of Skill Distribution***: bypassed every scanner tested — ClawHub (VirusTotal + a GPT-5.5 guard model), Cisco's `skill-scanner`, and the skills.sh scanners — each in under an hour. Padding a payload with 100,000 leading newlines caused the scanner to *truncate* the file and miss the malicious content; logic hidden in a precompiled `.pyc` bytecode file and inside a `.docx` (a ZIP of XML) went unscanned because the tools ignore binary and archive formats; and the scanner's own LLM judge was prompt-injected — wrapped in prose about "corporate standards" and "VPN access" — into rating a malicious npm-registry redirect as benign. Conversely, Anthropic's *legitimate* `LD_PRELOAD` Office shim was rated LOW because explanatory comments convinced the LLM it was safe. The authors conclude the "trust model is broken at the root" and automated scanning cannot replace human review of executable dependencies. Attack code: [trailofbits/overtly-malicious-skills](https://github.com/trailofbits/overtly-malicious-skills).
 
 ## Attack Scenarios
 
@@ -43,6 +44,10 @@ A malicious skill presents as a "security scanner," creating false confidence wh
 
 Skill behaves safely in test environments; activates malicious path only when specific runtime conditions (user, file presence, date) are met.
 
+### Scanner-Target Evasion
+
+The scanner is a known, static target. Pad the payload to force context truncation, hide it in a binary (`.pyc`) or archive (`.docx`/ZIP) the scanner won't open, or prompt-inject the scanner's own LLM with plausible prose so it rates the skill benign.
+
 ## Preventive Mitigations
 
 1. **Deploy behavioral analysis scanners** that evaluate *intent*, not just signatures — using calibrated models combined with deterministic rules. Agent-skill-aware scanners such as [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) (open source, Apache-2.0) pair fast static checks with optional LLM semantic analysis for exactly this purpose.
@@ -51,6 +56,8 @@ Skill behaves safely in test environments; activates malicious path only when sp
 4. **Implement multi-tool scanning pipelines**: pattern matching + semantic analysis + behavioral sandbox.
 5. **Treat scanner skill results as advisory only**; never use a skill-based scanner as the sole gate.
 6. **Continuously re-scan installed skills** as scanner models improve — not just at install time.
+7. **Scan the entire skill directory exhaustively** — every file, not just those referenced by `SKILL.md`: hidden files, compiled binaries (`.pyc`), archives (`.docx`/ZIP), and images (multimodal injection). Normalize and strip padding before analysis and never truncate — cost-driven scope reduction is itself attack surface.
+8. **Treat the scanner's own LLM as an injectable, attackable component**: isolate untrusted skill content from the analyzer's instructions, and never let skill-supplied prose (explanatory comments, "corporate standard" framing) steer the verdict.
 
 ## OWASP Mapping
 
@@ -87,7 +94,8 @@ Skill behaves safely in test environments; activates malicious path only when sp
 - [Snyk: toxicskills-goof](https://github.com/snyk-labs/toxicskills-goof)
 - [NVIDIA SkillSpector — open-source security scanner for AI agent skills](https://github.com/NVIDIA/SkillSpector)
 - [OWASP Top 10 - A6 Security Misconfiguration](https://owasp.org/www-project-top-ten/)
+- [Trail of Bits — The Sorry State of Skill Distribution (2026)](https://blog.trailofbits.com/2026/06/03/the-sorry-state-of-skill-distribution/)
 
 ---
 
-*Last updated: March 2026*
+*Last updated: June 2026*
