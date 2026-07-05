@@ -19,7 +19,7 @@ description: "Comprehensive guide to the top 10 security risks in AI agent skill
 
 **Breadcrumb:** [OWASP](https://owasp.org/) > [Projects](https://owasp.org/projects/) > Agentic Skills Top 10
 
-**📥 Download (v0.5):** [Full report (PDF)](/www-project-agentic-skills-top-10/docs/OWASP-Agentic-Skills-Top10-v0.5.pdf) · [Slide deck (PPTX)](/www-project-agentic-skills-top-10/docs/OWASP-Agentic-Skills-Top10-v0.5.pptx) — generated from this repository's [tools/](https://github.com/OWASP/www-project-agentic-skills-top-10/tree/main/tools).
+**Public review (v1):** Please review and comment on the merged v1 draft in the [Google Doc](https://docs.google.com/document/d/1A5d2OnT8h8oZo7MSde4TOT3sg3AkXJgTGQwVrAga1aE/edit?usp=drivesdk). Previous GitHub issues and pull requests remain available for historical reference, but v1 publication comments should be submitted in the Google Doc.
 
 ---
 

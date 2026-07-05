@@ -67,11 +67,11 @@ Both generators carry a document version (`VERSION`, currently **v0.5**), shown 
 the PDF cover and in the deck footer. Override it with `--doc-version`:
 
 ```bash
-python tools/build_pdf.py  --doc-version v0.6 --out docs/OWASP-Agentic-Skills-Top10-v0.6.pdf
-python tools/build_pptx.py --doc-version v0.6 --out docs/OWASP-Agentic-Skills-Top10-v0.6.pptx
+python tools/build_pdf.py  --doc-version v0.6 --out dist/OWASP-Agentic-Skills-Top10-v0.6.pdf
+python tools/build_pptx.py --doc-version v0.6 --out dist/OWASP-Agentic-Skills-Top10-v0.6.pptx
 ```
 
-Released snapshots are committed under [`../docs/`](../docs/) as
-`OWASP-Agentic-Skills-Top10-vX.Y.{pdf,pptx}` and linked from the project home page.
-To cut a new version: bump `VERSION` in both scripts, regenerate into `docs/`, and
-commit.
+For the v1 publication cycle, the merged draft is reviewed in Google Docs and
+generated PDF/PPTX snapshots should not be committed to `docs/`. The generators
+remain available for local drafts, release automation, or future publication
+workflows after the v1 review process returns to repository-managed artifacts.

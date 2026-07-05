@@ -13,6 +13,7 @@
 
 - **🌐 Website**: [https://owasp.github.io/www-project-agentic-skills-top-10/](https://owasp.github.io/www-project-agentic-skills-top-10/)
 - **📖 Documentation**: [Full Documentation](https://owasp.github.io/www-project-agentic-skills-top-10/)
+- **Public Review v1 Google Doc**: [Submit comments in Google Docs](https://docs.google.com/document/d/1A5d2OnT8h8oZo7MSde4TOT3sg3AkXJgTGQwVrAga1aE/edit?usp=drivesdk)
 - **🐙 GitHub Repository**: [https://github.com/OWASP/www-project-agentic-skills-top-10](https://github.com/OWASP/www-project-agentic-skills-top-10)
 - **🏛️ OWASP Project Page**: [https://owasp.org/www-project-agentic-skills-top-10](https://owasp.org/www-project-agentic-skills-top-10)
 - **📋 Security Checklist**: [checklist.md](checklist.md)
@@ -30,6 +31,8 @@
 - **📊 Security Metrics & Monitoring**: [metrics-monitoring.md](metrics-monitoring.md)
 - **🤝 Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **🛠️ Maintenance**: [MAINTENANCE.md](MAINTENANCE.md)
+
+For the v1 publication cycle, please submit document review comments in the Google Doc above. Earlier comments, issues, and pull requests remain available in GitHub for transparency and historical reference.
 
 ---
 

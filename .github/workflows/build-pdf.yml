@@ -1,25 +1,14 @@
 name: Build Top 10 PDF
 
-# Assembles the full OWASP Agentic Skills Top 10 into a single professional PDF
-# (cover, executive summary, acknowledgements, table of contents, and all ten
-# AST chapters rendered from their astNN.md source files).
-# The PDF is uploaded as a build artifact on every run, and attached to a
-# GitHub Release when one is published.
+# V1 publication review is being handled through the Google Doc only. Keep this
+# generator available for manual draft checks, but do not automatically publish
+# PDF artifacts from repository pushes or releases during the v1 review cycle.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'ast*.md'
-      - 'tools/build_pdf.py'
-      - 'assets/images/owasp-logo.png'
-      - '.github/workflows/build-pdf.yml'
   workflow_dispatch:
-  release:
-    types: [published]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -52,12 +41,6 @@ jobs:
           name: OWASP-Agentic-Skills-Top10-pdf
           path: dist/OWASP-Agentic-Skills-Top10.pdf
           if-no-files-found: error
-
-      - name: Attach to release
-        if: github.event_name == 'release'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.event.release.tag_name }}" dist/OWASP-Agentic-Skills-Top10.pdf --clobber
 
       - name: Job summary
         run: |
