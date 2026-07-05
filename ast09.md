@@ -119,6 +119,32 @@ Every skill execution produces two records, linked by a content-derived identifi
 
 **`policy_version` must be bound at decision time**: a policy change between admission and execution creates an audit gap if the version is not recorded with the decision.
 
+### Cross-Execution Causal Linking (Optional)
+
+Multi-skill chains, where one skill's outcome triggers another skill's execution, can be reconstructed by adding one optional field to the admission receipt:
+
+- `parent_action_ref`: the `action_ref` of the upstream execution whose outcome triggered this admission. Absent or `null` for root executions.
+
+**Binding target is the admission-derived ref, not the outcome hash**: the ref exists the moment the parent is admitted, so pipelined and concurrent flows can link before the parent completes. Happens-after ordering is recoverable from timestamps plus the presence of the parent outcome record.
+
+**Chain reconstruction**: a verifier walks `parent_action_ref` links from any downstream admission receipt back through upstream records, terminating at a root. Combined with the denied-before-dispatch property above, a DENY on a child receipt with a populated `parent_action_ref` is chain-cut evidence: it identifies which upstream execution attempted the escalation and where it was stopped.
+
+**Backward compatibility**: the field is additive. Verifiers that do not implement chain reconstruction validate single-execution receipts unchanged, and receipts without the field remain valid.
+
+Example, skill A outcome triggering skill B admission:
+
+```
+Skill A (root):
+  admission { attempt_id: "a-1", action_type: "fetch:report", parent_action_ref: null, ... }
+  outcome   { attempt_id: "a-1", action_ref: "sha256:9f2c...", terminal_state: "COMMITTED", ... }
+
+Skill B (triggered by A):
+  admission { attempt_id: "b-1", action_type: "email:send", parent_action_ref: "sha256:9f2c...", ... }
+  outcome   { attempt_id: "b-1", action_ref: "sha256:4d71...", terminal_state: "COMMITTED", ... }
+```
+
+A verifier holding only skill B's records can identify, and independently recompute, the upstream execution that triggered it.
+
 ### EU AI Act Article 12 Relevance
 
 Article 12 (enforcement August 2, 2026) requires high-risk AI systems to maintain logs enabling post-hoc verification of system operation. Bilateral receipts with independent verifiability satisfy this requirement in a way that operator-controlled logs do not: a regulator or auditor can verify the receipt without access to the operator's infrastructure.
